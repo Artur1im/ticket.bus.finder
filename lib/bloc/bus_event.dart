@@ -2,8 +2,8 @@ part of 'bus_bloc.dart';
 
 sealed class BusEvent {}
 
-class BusLoadMore extends BusEvent {}
+class BusLoadEvent extends BusEvent {}
 
-class BusFetchListInitial extends BusEvent {}
+class BusFetchEvent extends BusEvent {}
 
-class BusApplyFilter extends BusEvent {}
+class BusInitialEvent extends BusEvent {}

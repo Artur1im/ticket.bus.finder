@@ -16,5 +16,9 @@ class BusModel {
         departure = Station.fromJson(data['Departure']),
         destination = Station.fromJson(data['Destination']);
 
-  static fromJsonToList(data) {}
+  static List<BusModel> fromJsonToList(data) {
+    List<BusModel> collection =
+        (data['trips'] as List).map((item) => BusModel.fromJson(item)).toList();
+    return collection;
+  }
 }
