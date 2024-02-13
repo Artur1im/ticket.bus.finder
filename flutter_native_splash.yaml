@@ -1,0 +1,13 @@
+
+# flutter_native_splash.yaml
+
+# Цвет фона экрана приветствия
+flutter_native_splash:
+
+  color: "efb628"
+
+  # Путь к изображению для Android и iOS
+  image: "asset/img/bus.gif"
+
+  # Параметр для подгонки изображения (cover, contain, fill)
+  image_fit: "contain"
