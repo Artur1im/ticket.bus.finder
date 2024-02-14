@@ -7,9 +7,13 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      child: Text(title),
+    return SizedBox(
+      width: double.infinity,
+      height: 70,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        child: Text(title),
+      ),
     );
   }
 }

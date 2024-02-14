@@ -1,4 +1,4 @@
-import 'package:bus_finder/page/home.dart';
+import 'package:bus_finder/page/home_page.dart';
 import 'package:bus_finder/widget/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,6 +24,7 @@ class _AuthPageState extends State<AuthPage> {
             color: Colors.white,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -34,16 +35,18 @@ class _AuthPageState extends State<AuthPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (BuildContext context) => HomePage(),
+                            builder: (BuildContext context) => const HomePage(),
                           ));
                     },
                   ),
+                  const SizedBox(height: 20),
                   CustomButton(
                     title: 'Terms and Conditions',
                     onPressed: () {
                       _launchUrl(termsConditionsUrl);
                     },
                   ),
+                  const SizedBox(height: 20),
                   CustomButton(
                     title: 'Privacy Policy',
                     onPressed: () {
