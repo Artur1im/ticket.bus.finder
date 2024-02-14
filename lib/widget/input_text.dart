@@ -1,6 +1,6 @@
-import 'package:bus_finder/bloc/bus_bloc.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class Input extends StatefulWidget {
   late dynamic onChanged;
   Input({super.key, required String title, required this.onChanged});

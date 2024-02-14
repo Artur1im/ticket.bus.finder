@@ -34,7 +34,7 @@ class CustomCard extends StatelessWidget {
                 Text('город'),
               ],
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Column(
@@ -72,6 +72,5 @@ class CustomCard extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
