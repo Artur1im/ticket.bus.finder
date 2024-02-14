@@ -13,8 +13,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late dynamic text = '';
   TextEditingController dateController = TextEditingController();
   final BusBloc busBloc = BusBloc();
+
+  get bus => [];
+
+  @override
+  void initState() {
+    bus.set(BusFetchingListInitial());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +34,20 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       body: BlocBuilder<BusBloc, BusState>(
-        bloc: busBloc,
-        builder: (context, state) {
-          if (state is BusLoadEvent) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            );
-          } else if (state is BusFetchingSuccessfulState) {
-            final bus = state.bus;
-          }
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+          bloc: busBloc,
+          builder: (context, state) {
+            if (state is BusLoadEvent) {
+              return const Center(
+                child: CircularProgressIndicator(color: Colors.white),
+              );
+            } else if (state is BusFetchingSuccessfulState) {
+              final bus = state.bus;
+            }
+
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child:
+                  Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                 const SizedBox(height: 20),
                 Input(
                   title: 'Откуда',
@@ -63,8 +72,8 @@ class _HomePageState extends State<HomePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
-                      onChanged: (value) {
-                        busBloc.data(value);
+                      onChanged: (text) {
+                        busBloc.data(text);
                       },
                       controller: dateController,
                       decoration: const InputDecoration(
@@ -86,9 +95,7 @@ class _HomePageState extends State<HomePage> {
                           setState(() {
                             dateController.text = formattedDate;
                           });
-                        } else {
-                          print("Date is not selected");
-                        }
+                        } else {}
                       },
                     ),
                   ),
@@ -118,20 +125,21 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.all(15),
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
-                              itemCount: 1,
+                              itemCount: bus.length,
                               itemBuilder: (context, index) {
-                                return const Card(
-                                  color: Color.fromRGBO(252, 252, 252, 1),
+                                // final bus = state.bus[index];
+                                return Card(
+                                  color: const Color.fromRGBO(252, 252, 252, 1),
                                   child: Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(8.0),
                                     child: Column(
                                       children: [
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
-                                            Text('город'),
-                                            Text('город'),
+                                            Text(bus.departure),
+                                            Text(bus.destination),
                                           ],
                                         ),
                                         Row(
@@ -142,33 +150,36 @@ class _HomePageState extends State<HomePage> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text('Автобус 1'),
-                                                SizedBox(height: 5.0),
-                                                Icon(Icons.directions_bus),
-                                                Text('отбытие\n20: 00'),
+                                                Text(bus.routeName),
+                                                const SizedBox(height: 5.0),
+                                                const Icon(
+                                                    Icons.directions_bus),
+                                                Text(
+                                                    'Отбытие\n${bus.departureTime}'),
                                               ],
                                             ),
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text('100 км'),
-                                                SizedBox(
+                                                Text('${bus.distance} км'),
+                                                const SizedBox(
                                                   width: 100,
                                                   child: Divider(
                                                       color: Colors.black),
                                                 ),
-                                                Text('10 часво')
+                                                Text('${bus.duration} часов')
                                               ],
                                             ),
                                             Column(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text('Автобус 2'),
-                                                SizedBox(height: 5.0),
-                                                Icon(Icons.directions_bus),
-                                                Text('Прибытие\n20: 00'),
+                                                const SizedBox(height: 5.0),
+                                                const Icon(
+                                                    Icons.directions_bus),
+                                                Text(
+                                                    'Прибытие\n${bus.destination}'),
                                               ],
                                             ),
                                           ],
@@ -182,14 +193,12 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
-              ],
-            ),
-          );
-        },
-      ),
+              ]),
+            );
+          }),
     );
   }
 }
