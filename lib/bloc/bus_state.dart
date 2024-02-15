@@ -6,12 +6,10 @@ class BusFetchingListInitial extends BusState {}
 
 class BusFetchingLoadingState extends BusState {}
 
-class BusFetchingErrorState extends BusState {}
-
 class BusFetchingSuccessfulState extends BusState {
-  final List<BusModel> bus;
+  final List<BusModel> trips;
 
   BusFetchingSuccessfulState({
-    required this.bus,
+    required this.trips,
   });
 }

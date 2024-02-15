@@ -1,51 +1,52 @@
-import 'dart:async';
+// bus_bloc.dart
 
+import 'dart:async';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
+import 'package:bus_finder/api.dart/bus_api.dart';
 import 'package:bus_finder/model.dart/bus_model.dart';
 
 part 'bus_event.dart';
 part 'bus_state.dart';
 
 class BusBloc extends Bloc<BusEvent, BusState> {
-  late String _departure;
-  late String _destination;
-  late String _data;
+  String _departure = '';
+  String _destination = '';
+  String _date = '';
 
   List<BusModel> bus = [];
 
   BusBloc() : super(BusFetchingListInitial()) {
-    on<BusLoadEvent>(busLoadEvent);
     on<BusFetchEvent>(busFetchEvent);
     on<BusInitialEvent>(busInitialEvent);
-  }
-
-  FutureOr<void> busLoadEvent(
-      BusLoadEvent event, Emitter<BusState> emit) async {
-    emit(BusFetchingLoadingState());
-    emit(BusFetchingSuccessfulState(bus: bus));
   }
 
   FutureOr<void> busFetchEvent(
       BusFetchEvent event, Emitter<BusState> emit) async {
     emit(BusFetchingLoadingState());
-    emit(BusFetchingSuccessfulState(bus: bus));
+    log('$_departure $_destination $_date');
+    List<BusModel> collection = await BusApi().getTrips(
+      date: _date,
+      departure: _departure,
+      destination: _destination,
+    );
+    emit(BusFetchingSuccessfulState(trips: collection));
   }
 
   FutureOr<void> busInitialEvent(
       BusInitialEvent event, Emitter<BusState> emit) async {
-    emit(BusFetchingLoadingState());
-    emit(BusFetchingSuccessfulState(bus: bus));
+    emit(BusFetchingSuccessfulState(trips: []));
   }
 
-  get departure => _departure;
+  String get departure => _departure;
 
-  set departure(value) => _departure = value;
+  set departure(String value) => _departure = value;
 
   get destination => _destination;
 
   set destination(value) => _destination = value;
 
-  get data => _data;
+  get date => _date;
 
-  set data(value) => _data = value;
+  set date(value) => _date = value;
 }

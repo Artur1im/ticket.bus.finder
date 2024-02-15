@@ -1,6 +1,6 @@
 class Station {
   String name;
-  String locality;
+  String? locality;
 
   Station.fromJson(Map<String, dynamic> data)
       : name = data['Name'],

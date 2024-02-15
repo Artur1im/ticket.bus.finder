@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:bus_finder/api.dart/apr_error.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,6 +16,7 @@ class Api {
     params = (params);
 
     Uri url = Uri.https(ENDPOINT, '/${Api.VERSION_API}$path', params);
+    log(url.toString());
     http.Response response = await http.get(url, headers: _headers);
     Map<String, dynamic> content = jsonDecode(response.body);
     if (response.statusCode != 200) {
