@@ -45,93 +45,91 @@ class _HomePageState extends State<HomePage> {
 
             if (state is BusFetchingSuccessfulState) {
               List<BusModel> trips =
+                  // ignore: unnecessary_type_check
                   state is BusFetchingSuccessfulState ? state.trips : [];
 
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(children: [
-                      const SizedBox(height: 20),
-                      Input(
-                        title: 'Откуда',
-                        value: busBloc.departure,
-                        onChanged: (String value) {
-                          busBloc.departure = value.trim();
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Input(
-                        title: 'Куда',
-                        value: busBloc.destination,
-                        onChanged: (String value) {
-                          busBloc.destination = value.trim();
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          border: Border.all(color: Colors.black),
-                        ),
-                        width: 180,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            controller: dateController,
-                            decoration: const InputDecoration(
-                              icon: Icon(Icons.calendar_today),
-                              labelText: "Выберите дату",
-                            ),
-                            readOnly: true,
-                            onTap: () async {
-                              DateTime? pickedDate = await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime(2000),
-                                lastDate: DateTime(2101),
-                              );
-                              if (pickedDate != null) {
-                                String formattedDate =
-                                    DateFormat('yyyy-MM-dd').format(pickedDate);
-
-                                setState(() {
-                                  dateController.text = formattedDate;
-                                });
-
-                                busBloc.date = formattedDate;
-                              } else {}
+              return SingleChildScrollView(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Input(
+                            title: 'Откуда',
+                            value: busBloc.departure,
+                            onChanged: (String value) {
+                              busBloc.departure = value.trim();
                             },
                           ),
-                        ),
-                      ),
-                      const Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                              'Выберите Откуда и Куда и выберите дату отправки'),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Column(
-                        children: [
+                          const SizedBox(height: 20),
+                          Input(
+                            title: 'Куда',
+                            value: busBloc.destination,
+                            onChanged: (String value) {
+                              busBloc.destination = value.trim();
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              border: Border.all(color: Colors.black),
+                            ),
+                            width: 180,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                controller: dateController,
+                                decoration: const InputDecoration(
+                                  icon: Icon(Icons.calendar_today),
+                                  labelText: "Выберите дату",
+                                ),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2101),
+                                  );
+                                  if (pickedDate != null) {
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(pickedDate);
+
+                                    setState(() {
+                                      dateController.text = formattedDate;
+                                    });
+
+                                    busBloc.date = formattedDate;
+                                  } else {}
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 15),
                           CustomButton(
                             title: 'Найти Автобус',
                             onPressed: () {
-                              // Запуска2й
                               busBloc.add(BusFetchEvent());
                             },
                           ),
-                          SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.height,
-                                  padding: const EdgeInsets.all(15),
+                          Column(
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                padding: const EdgeInsets.all(15),
+                                child: RefreshIndicator(
+                                  onRefresh: () async {
+                                    busBloc.add(BusFetchEvent());
+                                  },
                                   child: ListView.builder(
+                                    padding: const EdgeInsets.only(bottom: 100),
                                     scrollDirection: Axis.vertical,
                                     itemCount: trips.length,
                                     itemBuilder: (context, index) {
@@ -142,44 +140,64 @@ class _HomePageState extends State<HomePage> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
+                                              Center(
+                                                  child: Text(trip.routeName)),
+                                              const SizedBox(height: 10),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceAround,
                                                 children: [
-                                                  Text(trip.departure.name),
-                                                  Text(trip.destination.name),
+                                                  SizedBox(
+                                                      width: 100,
+                                                      child: Text(
+                                                          trip.departure.name)),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Icon(
+                                                      Icons
+                                                          .arrow_circle_right_rounded,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                      width: 100,
+                                                      child: Text(trip
+                                                          .destination.name)),
                                                 ],
                                               ),
+                                              const SizedBox(height: 10),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
-                                                        .spaceEvenly,
+                                                        .spaceAround,
                                                 children: [
                                                   Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
                                                     children: [
-                                                      Text(trip.routeName),
-                                                      const SizedBox(
-                                                          height: 5.0),
                                                       const Icon(
                                                           Icons.directions_bus),
-                                                      Text(
-                                                          'Отбытие\n${trip.departureTime}'),
+                                                      SizedBox(
+                                                        width: 80,
+                                                        child: Text(
+                                                            'Отбытие\n${trip.departureTime}'),
+                                                      ),
                                                     ],
                                                   ),
                                                   Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
                                                             .center,
                                                     children: [
-                                                      Text(
-                                                          '${trip.distance} км'),
+                                                      SizedBox(
+                                                        width: 50,
+                                                        child: Text(
+                                                            '${trip.distance} км'),
+                                                      ),
                                                       const SizedBox(
-                                                        width: 100,
+                                                        width: 50,
                                                         child: Divider(
                                                             color:
                                                                 Colors.black),
@@ -189,16 +207,16 @@ class _HomePageState extends State<HomePage> {
                                                     ],
                                                   ),
                                                   Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
                                                     children: [
                                                       const SizedBox(
                                                           height: 5.0),
                                                       const Icon(
                                                           Icons.directions_bus),
-                                                      Text(
-                                                          'Прибытие\n${trip.destination}'),
+                                                      SizedBox(
+                                                        width: 80,
+                                                        child: Text(
+                                                            'Прибытие\n${trip.arrivalTime}'),
+                                                      ),
                                                     ],
                                                   ),
                                                 ],
@@ -210,12 +228,12 @@ class _HomePageState extends State<HomePage> {
                                     },
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ]),
+                    ),
                   ),
                 ),
               );

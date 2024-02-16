@@ -27,7 +27,7 @@ class _InputState extends State<Input> {
       decoration: InputDecoration(
         labelText: widget.title,
         border: const OutlineInputBorder(),
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: const Icon(Icons.location_city),
       ),
     );
   }

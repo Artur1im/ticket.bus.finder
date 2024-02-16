@@ -9,6 +9,7 @@ class BusModel {
   Station destination;
   String distance;
   String departureTime;
+  String arrivalTime;
 
   BusModel.fromJson(Map<String, dynamic> data)
       : routeName = data['RouteName'],
@@ -18,7 +19,8 @@ class BusModel {
         departure = Station.fromJson(data['Departure']),
         destination = Station.fromJson(data['Destination']),
         distance = data['Distance'],
-        departureTime = data['DepartureTime'];
+        departureTime = data['DepartureTime'],
+        arrivalTime = data['ArrivalTime'];
 
   static List<BusModel> fromJsonToList(data) {
     List<BusModel> collection =
